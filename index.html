@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <title>GadgetHub</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: #f5f5f7;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: #1e40af;
+      color: #fff;
+      padding: 20px 40px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+    nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      font-size: 1rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    nav a:hover {
+      color: #1e40af;
+      background-color: #facc15;
+    }
+    nav a.account-link.login:hover {
+      background-color: transparent;
+      border-color: #facc15;
+      color: #facc15;
+    }
+    nav a.account-link.register {
+      background-color: #facc15;
+      color: #1e40af;
+      font-weight: 700;
+    }
+    nav a.account-link.register:hover {
+      background-color: #eab308;
+      color: #1e40af;
+    }
+    main {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      flex-grow: 1;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    .product-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 1px solid #ddd;
+    }
+    .product-details {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .product-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #1e293b;
+    }
+    .product-description {
+      font-size: 0.9rem;
+      color: #64748b;
+      flex-grow: 1;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+    .product-price {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #15803d;
+      margin-bottom: 15px;
+    }
+    button.buy-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.6);
+    }
+    button.buy-btn:hover {
+      background: #1d4ed8;
+      box-shadow: 0 8px 24px rgba(29, 78, 216, 0.7);
+    }
+    footer {
+      background-color: #1e40af;
+      color: #cbd5e1;
+      text-align: center;
+      padding: 20px 10px;
+      margin-top: auto;
+      font-size: 0.9rem;
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      header {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+      header h1 {
+        font-size: 1.5rem;
+        flex-basis: 100%;
+        text-align: center;
+      }
+      nav {
+        justify-content: center;
+        gap: 15px;
+        flex-basis: 100%;
+      }
+      nav a {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+      }
+      main {
+        margin: 20px 10px;
+      }
+      .product-image {
+        height: 150px;
+      }
+    }
+    /* Contact info styling */
+    .contact-info {
+      max-width: 400px;
+      margin: 0 auto 30px;
+      font-size: 1rem;
+      color: #1e293b;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-weight: 600;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .contact-icon {
+      font-size: 1.3rem;
+      color: #2563eb;
+      min-width: 24px;
+      text-align: center;
+    }
+    .contact-link {
+      color: #2563eb;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .contact-link:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal {
+      background: white;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 90%;
+      padding: 30px 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      position: relative;
+    }
+    .modal h3 {
+      margin-bottom: 20px;
+      color: #1e293b;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    .modal form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .modal label {
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+    .modal input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      transition: border-color 0.3s ease;
+    }
+    .modal input:focus {
+      border-color: #2563eb;
+      outline: none;
+    }
+    .modal button {
+      margin-top: 10px;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.6);
+    }
+    .modal button:hover {
+      background-color: #1d4ed8;
+      box-shadow: 0 8px 24px rgba(29, 78, 216, 0.7);
+    }
+    .modal .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: #64748b;
+      font-size: 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+    .modal .close-btn:hover {
+      color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <header>
+     <h1> GadgetHub </h1>
+    <nav>
+      <a href="#products">Головна</a>
+      <a href="#contact">Контакти</a>
+      <a href="#cart" onclick="alert('Кошик порожній :)')">Кошик </a>
+      <a class="account-link login" onclick="openModal('loginModal')">Ввійти</a>
+      <a class="account-link register" onclick="openModal('registerModal')">Реєстрація</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="products">
+      <h2 style="margin-bottom: 30px; color: #1e293b; text-align: center; font-weight: 700;">Наші товари</h2>
+      <div class="products-grid">
+        <div class="product-card">
+          <img src=https://mcstore.com.ua/image/cache/catalog/xiphone16problack-1726595036-600x600.jpg.pagespeed.ic.LnU4WCvKOj.webp alt="Смартфон" class="product-image" />
+          <div class="product-details">
+            <div>
+              <div class="product-title">Apple iPhone 16 Pro 128GB eSIM Black Titanium</div>
+              <div class="product-description"></div>
+            </div>
+            <div>
+              <div class="product-price">40 630 грн грн</div>
+              <button class="buy-btn" onclick="addToCart('Смартфон X100', 40 630)">Купити</button>
+            </div>
+          </div>
+        </div>
+      <div class="product-card"> 
+        <img src=https://m6hyxhcitg.execute-api.eu-central-1.amazonaws.com/prod/storage/app/uploads/public/667/05e/992/66705e99255c2311534431.jpg?width=1000&format=webp "Ноутбук" class="product-image" />
+          <div class="product-details">
+            <div>
+              <div class="product-title">Ноутбук ideapad Pro 5 14AHP9 Arctic Grey&quot;</div>
+              <div class="product-description"></div>
+            </div>
+            <div>
+              <div class="product-price">45 999 грн</div>
+              <button class="buy-btn" onclick="addToCart('&quot;',45 999 )">Купити</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <img src=data:image/jpeg;base64,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 alt="Навушники" class="product-image" />
+          <div class="product-details">
+            <div>
+              <div class="product-title">Бездротові навушники Sony WH-CH520 Black</div>
+              <div class="product-description"></div>
+            </div>
+            <div>
+              <div class="product-price">1799 грн</div>
+              <button class="buy-btn" onclick="addToCart('Бездротові навушники Sony', 1799)">Купити</button>
+            </div>
+          </div>
+        </div>
+          <div class="product-card">
+          <img src=data:image/jpeg;base64,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 alt="Смарт-годинник" class="product-image" />
+          <div class="product-details">
+            <div>
+              <div class="product-title">Смарт-годиник Smart Watch T 500-1.54 Black</div>
+              <div class="product-description"></div>
+            </div>
+            <div>
+              <div class="product-price">700 грн</div>
+              <button class="buy-btn" onclick="addToCart('Смарт-часы Smart Watch T 500-1.54 Black', 700)">Купити</button>
+            </div>
+          </div>
+        </div>
+       
+        </div>
+      </div>
+       <section id="products">
+      <h2 style="margin-bottom: 30px; color: #1e293b; text-align: center; font-weight: 700;"></h2>
+      <div class="products-grid">
+        <div class="product-card">
+          <img src=https://i.moyo.ua/img/products/5691/10_600.jpg alt= class="product-image" />
+          <div class="product-details">
+            <div>
+              <div class="product-title">Ігрова приставка PlayStation 5 Slim</div>
+              <div class="product-description"></div>
+            </div>
+            <div>
+              <div class="product-price">22 999 грн грн</div>
+              <button class="buy-btn" onclick="addToCart(' X100', 40 630)">Купити</button>
+            </div>
+          </div>
+        </div>
+      <div class="product-card"> 
+        <img src= https://hotline.ua/img/tx/232/232843367_s265.jpg class="product-image" />
+          <div class="product-details">
+            <div>
+              <div class="product-title">Мікрофон для ПК/ для стрімінгу, подкастів HyperX Quadcast (HX-MICQC-BK)&quot;</div>
+              <div class="product-description"></div>
+            </div>
+            <div>
+              <div class="product-price">6 399 грн</div>
+              <button class="buy-btn" onclick="addToCart('&quot;',45 999 )">Купити</button>
+            </div>
+          </div>
+        </div>
+    <section id="contact" style="margin-top: 60px; text-align: center;">
+      <h2 style="color: #1e293b; margin-bottom: 20px;">Зв’яжіться з нами</h2>
+
+      <div class="contact-info" aria-label="Контактна інформація">
+        <div class="contact-item">
+          <span class="contact-icon">📞</span>
+          <a href="tel:+380501234567" class="contact-link">+38 (050) 123-45-67</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📱</span>
+          <a href="tel:+380971112233" class="contact-link">+38 (097) 111-22-33</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">✉️</span>
+          <a href="mailto:info@internet-shop.ua" class="contact-link">info@internet-shop.ua</a>
+        </div>
+      </div>
+
+      <p>Питання? Пропозиції? Напишіть нам!</p>
+      <form onsubmit="submitContactForm(event)" style="max-width:400px; margin: 20px auto; text-align: left;">
+        <label for="name">Ім’я</label><br />
+        <input id="name" name="name" type="text" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 15px;" />
+        <label for="email-contact">Електронна пошта</label><br />
+        <input id="email-contact" name="email-contact" type="email" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 15px;" />
+        <label for="message">Повідомлення</label><br />
+        <textarea id="message" name="message" rows="4" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;"></textarea><br />
+        <button type="submit" class="buy-btn" style="width: 100%; margin-top: 15px;">Відправити</button>
+      </form>
+    </section>
+  </main>
+ <footer>
+    &copy; 2025 Інтернет-магазин. Всі права захищені.
+  </footer>
+ <!-- Login Modal -->
+  <div id="loginModal" class="modal-overlay" onclick="closeModal(event, 'loginModal')">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle" onclick="event.stopPropagation()">
+      <span class="close-btn" onclick="closeModal(event, 'loginModal')" aria-label="Закрити">&times;</span>
+      <h3 id="loginTitle">Ввійти</h3>
+      <form id="loginForm" onsubmit="submitLoginForm(event)">
+        <label for="loginEmail">Електронна пошта</label>
+        <input type="email" id="loginEmail" name="loginEmail" required autocomplete="username" />
+        <label for="loginPassword">Пароль</label>
+        <input type="password" id="loginPassword" name="loginPassword" required autocomplete="current-password" />
+        <button type="submit">Увійти</button>
+      </form>
+    </div>
+  </div>
+ <!-- Register Modal -->
+  <div id="registerModal" class="modal-overlay" onclick="closeModal(event, 'registerModal')">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle" onclick="event.stopPropagation()">
+      <span class="close-btn" onclick="closeModal(event, 'registerModal')" aria-label="Закрити">&times;</span>
+      <h3 id="registerTitle">Реєстрація</h3>
+      <form id="registerForm" onsubmit="submitRegisterForm(event)">
+        <label for="registerName">Ім’я</label>
+        <input type="text" id="registerName" name="registerName" required autocomplete="name" />
+        <label for="registerEmail">Електронна пошта</label>
+        <input type="email" id="registerEmail" name="registerEmail" required autocomplete="email" />
+        <label for="registerPassword">Пароль</label>
+        <input type="password" id="registerPassword" name="registerPassword" required autocomplete="new-password" />
+        <button type="submit">Зареєструватися</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+
+    function addToCart(productName, price) {
+      cart.push({ name: productName, price: price });
+      alert(productName + " додано до кошика!");
+      updateCartCount();
+    }
+
+    function updateCartCount() {
+      console.log("Кількість товарів у кошику: " + cart.length);
+    }
+
+    function submitContactForm(event) {
+      event.preventDefault();
+      alert('Дякуємо за ваше повідомлення! Ми зв’яжемося з вами найближчим часом.');
+      event.target.reset();
+    }
+
+    // Modal control
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+    }
+    function closeModal(event, modalId) {
+      event.preventDefault();
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    // Login form submission simulation
+    function submitLoginForm(event) {
+      event.preventDefault();
+      const email = event.target.loginEmail.value.trim();
+      const password = event.target.loginPassword.value.trim();
+      if (email && password) {
+        alert(`Ви увійшли як: ${email}`);
+        closeModal(event, 'loginModal');
+        event.target.reset();
+      } else {
+        alert('Будь ласка, заповніть всі поля.');
+      }
+    }
+
+    // Register form submission simulation
+    function submitRegisterForm(event) {
+      event.preventDefault();
+      const name = event.target.registerName.value.trim();
+      const email = event.target.registerEmail.value.trim();
+      const password = event.target.registerPassword.value.trim();
+      if (name && email && password) {
+        alert(`Дякуємо за реєстрацію, ${name}!`);
+        closeModal(event, 'registerModal');
+        event.target.reset();
+      } else {
+        alert('Будь ласка, заповніть всі поля.');
+      }
+    }
+  </script>
+</body>
+</html>
